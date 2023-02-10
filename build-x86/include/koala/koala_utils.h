@@ -42,26 +42,67 @@
 
 /* ---- Function Prototypes ---------------------------------------------- */
 
+/*
+***Измените режим терминала для немедленного возврата
+***Change terminal mode for getchar to return immediately
+
+Parameters:
+      ***dir:
+            1 mode changed to non-blocking, 
+            0 mode reverted to previous*/
 extern void koala_change_term_mode(int dir);
 
+/*
+***Test if anykey was pushed
+
+Returns:
+      -1 if error occured 
+      >=0 number of characters to read*/
 extern int koala_kbhit(void);
 
+/*
+Clear the console screen*/
 extern void koala_clrscr(void);
 
+/*
+move cursor (origin at 1,1)
+
+Parameters:
+      ***c - column
+      ***l - line*/
 extern void koala_move_cursor(int c, int l);
 
+/*
+move cursor column (origin at 1,1), keep line
+
+Parameters:
+      ***c - column*/
 extern void koala_move_cursor_column(int c);
 
+/*
+***move cursor line (origin at 1,1), keep column
+
+Parameters:
+      ***l - line*/
 extern void koala_move_cursor_line(int l);
 
+/*
+erase line (origin at 1,1)
+
+Parameters:
+      ***line - line*/
 extern void koala_erase_line(int line);
 
-extern long long
-koala_timeval_diff(struct timeval *difference,
-             struct timeval *end_time,
-             struct timeval *start_time
-            );
+/*
+***Compute time difference
 
+Parameters:
+      ***difference - difference between the two times, in structure timeval type
+      ***end_time - end time
+      ***start_time - start time
+Returns:
+      difference between the two times in [us]*/
+extern long long koala_timeval_diff(struct timeval *difference, struct timeval *end_time, struct timeval *start_time);
 
 #endif // #ifndef __koala_utils__
 
