@@ -1,37 +1,3 @@
-//--------------------------------------------------------------------------------//
-//-                   KOALA( Koala extension board			 )                       -//
-//                                                                               -//
-//-  Copyright (C) Julien Tharin, K-Team S.A. 2013                               -//
-//-  This library is free software; you can redistribute it and/or               -//
-//-  modify it under the terms of the GNU Lesser General Public                  -//
-//-  License as published by the Free Software Foundation; either                -//
-//-  version 2.1 of the License, or any later version.                           -//
-//-                                                                              -//
-//-  This library is distributed in the hope that it will be useful,             -//
-//-  but WITHOUT ANY WARRANTY; without even the implied warranty of              -//
-//-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU           -//
-//-  Lesser General Public License for more details.                             -//
-//-                                                                              -//
-//-  You should have received a copy of the GNU Lesser General Public            -//
-//-  License along with this library; if not, write to the Free Software         -//
-//-  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA   -//
-//-                                                                              -//
-//-                               __  __  ________                               -//
-//- K-Team S.A.                  |  |/  /|__    __|___  _____  ___  ___          -//
-//- Chemin des Plans-Praz 28,    |     / __ |  | _____|/  _  \|   \/   |         -//
-//- 1337 Vallorbe                |  |  \    |  | ____|/  /_\  |        |         -//
-//- Switzerland                  |__|\__\   |__|______|_/   \_|__|\/|__|         -//
-//- jtharin@k-team.com   tel:+41 24 423 89 56 fax:+41 24 423 8960                -//
-//-                                                                              -//
-//--------------------------------------------------------------------------------//
-
-////////////////////////////////////////////////////////////////////////////////
-/*!   \file koala_robot.h
-      \brief header of Funtions for commanding the Koala
-*/
-////////////////////////////////////////////////////////////////////////////////
-
-
 #ifndef __koala_robot__
 #define __koala_robot__
 
@@ -213,21 +179,136 @@ extern int koala_robot_release( void );
 
 
 // "Low level" function to communicate with the KOALA via serial
+
+
 extern int koala_sendcommand(char *command,int write_len);
+/*
+Получает командный кадр от робота.
+gets a command frame from the robot.
+Normally an end user don't want to use these function as they are assumed as "low level functions".
+
+Parameters:
+	***read_len	(is the size of the message received)
+	***command	(is a pointer to a buffer where the command frame will be stored in.)
+*/
 extern int koala_getcommand(char *command,int read_len);
+/*
+Получает командную строку от робота.
+gets a command line from the robot.
+Normally an end user don't want to use these function as they are assumed as "low level functions".
+
+Parameters:
+	***command (is a pointer to a buffer where the command frame will be stored in.)
+*/
 extern int koala_getcommand_line(char *command);
 
 // "High level" function that let user to simply retrieve various informations from the robot
-extern int koala_get_firmware_version_revision(char *version,char *revision);
 
+/*
+***Извлекает текущую версию прошивки OS Firmware version/revision
+***retrieves the current OS Firmware version/revision
+
+Parameters:
+	***version	- version
+	***revision	- revision*/
+extern int koala_get_firmware_version_revision(char *version,char *revision);
+/*
+Прочитайте различные значения батареи
+Read the different values of the battery
+
+Parameters:
+	***bat_type	
+		0 = Li-ION, 
+		1 = NiMH, 
+		2 = not initialised
+	***bat_voltage	
+		Voltage of the battery (unit is 0.1V)
+	***bat_current	
+		Current of the battery (unit is 0.1A)
+	***chrg_current	
+		Charge Current (unit is 10mA)*/
 extern int koala_get_battery_data(int *bat_type,int *bat_voltage, int *bat_current,int *chrg_current);
+
+
+
+/*
+*** Включить периферийное устройство автоматически, не спрашивая его значение при обновлении
+*** Enable a peripheral to return automatically without asking its value when refreshed
+
+Parameters:
+bit_config	binary OR bit mask configuration for auto monitoring mode (default: all OFF) see koala_robot.h for constant definition of each 
+Bit 0: US sensor 
+Bit 1: Motor Speed 
+Bit 2: Motor Position 
+Bit 3: Motor Current 
+Bit 4: Accelerometer value 
+Bit 5: Gyroscope value 
+Bit 6: GPS data 
+Bit 7: GPS NEMA Data (will return all GPS raw data) 
+Bit 8: Magnometer value*/
 extern int koala_configure_auto_monitoring_mode(unsigned int bit_config);
+/*
+***Получить значения из автозаправления
+***Get values from auto mode
+
+Parameters:
+	***data - data received
+
+koala_auto_data_t: (for speed, current, position) 
+	int left_speed;     // motor left speed
+	int right_speed;    // motor right speed
+	int left_position;  // motor left position
+	int right_position; // motor right position
+	int left_current;   // motor left current
+	int right_current;  // motor right current
+	int us[KOALA_US_SENSORS_NUMBER]; // us sensors
+	int accel[KOALA_ACCEL_VALUES_NUMBER]; // accelerometer
+	int gyro[KOALA_GYRO_VALUES_NUMBER];   // gyrometer
+	int magne[KOALA_MAGNE_VALUES_NUMBER]; // magnometer
+	char gps_raw[KOALA_MAX_BUFFER];
+	char mode; // type of the data received
+	gps_data_t gps;
+*/
 extern int koala_get_from_auto_mode(koala_auto_data_t *data);
+/*
+***Настройте режим автоматического мониторинга.Включите периферийное устройство автоматически, не спрашивая его значение при обновлении.
+***Configure the auto monitoring mode. Enable a peripheral to return automatically without asking its value when refreshed.
+
+Parameters:
+***us_mask(binary OR bit mask configuration for use of Ultrasonic sensors (default: all active) see koala_robot.h for constant definition of each)
+	Bit 0: Left rear 
+	Bit 1: Left front 
+	Bit 2: Front left 
+	Bit 3: Front 
+	Bit 4: Front right 
+	Bit 5: Right front 
+	Bit 6: Right rear 
+	Bit 7: Back right 
+	Bit 8: Back left
+***io_dir(binary OR bit mask configuration for direction of the four IO (0..3)). 
+	Each IO is configure with two following bits: (IO0 = bit0 & 1, IO1 = bit2&3,…). 
+	Default: 
+		0 = all output 
+		00 = output 
+		01 = input 
+		10 = PWM servo (50Hz). 
+	see koala_robot.h for constant definition of each*/
 extern int koala_configure_us_io(int us_mask,unsigned char io_dir);
 
+
+
+/*
+Настройте значение контроллера PID, используемое для управления скоростью.
+Configure the PID controller value used for the speed control.
+
+Parameters:
+kp - P parameter - Get Encoder value (Читает фактическое значение кодера позиции)
+ki - I parameter - Set the position encoder value (Сбрасывает значение кодера положения двигателя)
+kd - D parameter - Set Motor speed (Устанавливает скорость двигателя)*/
 extern int koala_configure_pid(int kp, int ki,int kd);
 extern int koala_set_speed_profile(int acc_inc,int acc_div,int min_speed,int cst_speed,int pos_margin,int max_current);
 extern int koala_set_position_encoders(int left, int right);
+
 
 
 extern int koala_set_motor_speed(int left, int right);
@@ -237,13 +318,58 @@ extern int koala_read_motor_speed(int *left, int *right);
 extern int koala_set_motor_target_position(int left, int right);
 extern int koala_read_motor_current(int *left, int *right);
 extern int koala_read_motor_position(int *left, int *right);
+/*
+***Get Motor control status
+***Read the actual status of the motor control
+***Получите статус управления двигателем
+***Прочитайте фактическое состояние управления двигателем
+
+Parameters:
+	***left_status(left motor control status Type of actual control): 
+		0: Idle 
+		1: Speed 
+		2: Speed with Acceleration 
+		3: Position 
+		4: Open Loop 
+		5: Current Limitation 
+		6: Error
+	***right_status(right motor control status):
+		0: Idle 
+		1: Speed 
+		2: Speed with Acceleration 
+		3: Position 
+		4: Open Loop 
+		5: Current Limitation 
+		6: Error
+	***left_pos(left motor): 
+		1 if the target is reach(Если цель достигается) (position control)
+	***right_pos(right motor): 
+		1 if the target is reach(Если цель достигается) (position control)*/
 int koala_get_motor_status(int *left_status, int *right_status,int *left_pos, int *right_pos);
+
+
 
 extern int koala_read_us_sensors(int *values_array);
 extern int koala_read_accelerometer(int *values_array);
 extern int koala_read_gyroscope(int *values_array);
 extern int koala_read_magnetometer(int *values_array);
 
+
+
+/*
+***Получить данные GPS
+***Get GPS data
+
+Parameters:
+	***valid_sat - Valid data flag (V = Warning, A = Valid)
+	***sat_nb - number of satellites used (количество используемых спутников)
+	***lat_val - latitude (широта)
+	***lat_car - latitude N or S
+	***long_val - longitude (долготу)
+	***long_car - longitude W or E
+	***date_time - UTC time and time of the latest fix
+	***speed - Speed over ground (in knots)
+	***altitude - Actual altitude (высота)(in meters)*/
 extern int koala_gps_data(char *valid_sat, int *sat_nb,double *lat_val,char *lat_car,double *long_val,char *long_car,struct tm *date_time,double *speed,int *altitude);
 extern int koala_send_gps_cmd(char *gps_cmd);
 

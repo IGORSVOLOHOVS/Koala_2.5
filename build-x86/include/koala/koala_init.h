@@ -35,10 +35,10 @@
 #ifndef __koala_init__
 #define __koala_init__
 
-
-
-
+// init header library
 extern int  koala_init( int argc , char * argv[] );
+
+// This function is called automatically!
 extern void koala_exit( void );
 
 #endif /* __koala_init_ */
