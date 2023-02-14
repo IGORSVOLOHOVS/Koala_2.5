@@ -19,16 +19,20 @@
 		}                                        \
 	}
 
+// print to console robot info
 void PrintInit(){
 	printf("Koala V2.5 robot Auto mode test program\n(C) K-Team S.A\n");
 }
+// print to console version and revision
 void PrintVersion(char *version, char *revision) {
 	printf("Koala version: %c  revision: %d\n", *version, *revision);
 }
+// print to console motor speed data
 void PrintMotorSpeed(const koala_auto_data_t *data)
 {
 	printf("\nMotor speed  : left: %5d  right: %5d\n", data->left_speed, data->right_speed);
 }
+// print to console sensors data
 void PrintUSsensor(const koala_auto_data_t *data)
 {
 	printf("\nUS sensors:\n");
@@ -37,6 +41,7 @@ void PrintUSsensor(const koala_auto_data_t *data)
 		printf("  US %d: %d\n", i, data->us[i]);
 	}
 }
+// print to console accelerometer data
 void PrintAccelerometerValue(const koala_auto_data_t *data)
 {
 	int dmean = 0, dval = 0, i = 0;
@@ -73,6 +78,7 @@ void PrintAccelerometerValue(const koala_auto_data_t *data)
 	printf(" %6.1f", dmean / 10.0);
 	printf("\n");
 }
+// print to console gyroscope data
 void PrintGyroscopeValue(const koala_auto_data_t *data)
 {
 	printf("\ngyro sensor [deg/s]\n       new data                                                      old data    average\ngyro X: ");
@@ -108,12 +114,15 @@ void PrintGyroscopeValue(const koala_auto_data_t *data)
 	printf(" %6.1f", dmean / 10.0);
 	printf("\n");
 }
+// print to console motor current
 void PrintMotorCurrent(const koala_auto_data_t *data) {
 	printf("\nMotor current: left: %5d  right: %5d\n", data->left_current, data->right_current);
 }
+// print to console motor position
 void PrintMotorPosition(const koala_auto_data_t *data) {
 	printf("\nMotor current: left: %5d  right: %5d\n", data->left_position, data->right_position);
 }
+// print to console GPS data
 void PrintGPSdata(const koala_auto_data_t *data) {
 	printf("\nGPS data:\
 					 				\n  valid mode: %c\
@@ -126,9 +135,11 @@ void PrintGPSdata(const koala_auto_data_t *data) {
 					        \n  altitude  : %5d [m]\n",
 		   data->gps.valid_sat, data->gps.sat_nb, data->gps.lat_val, data->gps.lat_car, data->gps.long_val, data->gps.long_car, data->gps.date_time.tm_hour, data->gps.date_time.tm_min, data->gps.date_time.tm_sec, data->gps.date_time.tm_mday, data->gps.date_time.tm_mon, data->gps.date_time.tm_year, data->gps.speed, data->gps.altitude);
 }
+// print to console GPS data raw
 void PrintGPSraw(const koala_auto_data_t *data) {
 	printf("\nGPS raw data: %s\n", data->gps_raw);
 }
+// print to console magnetometer data
 void PrintMagnetometerData(const koala_auto_data_t *data) {
 	printf("\nMagnetometer: x:%5d  y:%5d  z:%5d [mGauss]\n", data->magne[0], data->magne[1], data->magne[2]);
 }
@@ -148,14 +159,7 @@ int main(int argc, char *argv[])
 {
 	// Helpers
 	int error = 0;		   // check error if rc < 0 ---> error
-	//int i;				   // iterator(is used in cycle for)
 	unsigned int bit_conf; // bit configuration for koala_configure_auto_monitoring_mode
-
-	// Accelerometer and gyroskope parametrs
-	//double dval, dmean;
-
-	// Version parapetrs
-	char revision, version;
 
 	// Receiving automatic data from the world
 	koala_auto_data_t data;
@@ -172,9 +176,8 @@ int main(int argc, char *argv[])
 		error = koala_get_firmware_version_revision(&version, &revision);
 		IF_ERROR("ERROR %d: Koala did not respond correctly!\n", error, -2);
 	}
-	PrintVersion(version, revision);
+	PrintVersion(&version, &revision);
 	
-
 	// Set auto mode configuration
 	bit_conf = KOALA_AUTOM_MOTOR_POSITION | KOALA_AUTOM_MAGNE_VALUE;
 	error = koala_configure_auto_monitoring_mode(bit_conf);
