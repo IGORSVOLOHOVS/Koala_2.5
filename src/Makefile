@@ -2,9 +2,11 @@ SRCS		= $(wildcard *.c)
 OBJS		= $(patsubst %.c,%.o,${SRCS})
 
 
-
+TARGET_SYSTEM = x86
 BUILD		= ../build-${TARGET_SYSTEM}
 INSTALL_PATH = /usr
+LIBNAME = libkoala
+LIBVER = 1.0
 
 ifeq ($(DEBUG),1)
 CFLAGS 		= -g -fPIC

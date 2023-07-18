@@ -8,7 +8,7 @@ OBJS		= $(patsubst %.c,%.o,${SRCS})
 
 
 
-BUILD		= build-${TARGET_SYSTEM}
+BUILD		= build-x86
 
 ifeq ($(DEBUG),1)
 CFLAGS 		= -g -fPIC
