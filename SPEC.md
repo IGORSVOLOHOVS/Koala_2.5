@@ -4,6 +4,37 @@ Reverse-engineered on 2026-11-18 from commit `dc18adb`. Every requirement states
 behaviour present in the code and cites its source. Hub document:
 [docs/README.md](docs/README.md).
 
+<!-- jira-sync:start -->
+Jira: KAN-123
+
+## Tasks
+
+This list is one ticket in Jira project KAN, [KAN-123](https://igorsvolohovs.atlassian.net/browse/KAN-123). Each line is a checkbox there: tick it in Jira and the sync ticks it here; add a checkbox there and it is appended here. Done items are the features described in section 3; open items are what the project declares but the code does not do yet.
+
+- [x] Initialisation and shutdown (section 3.1) <!-- spec-initialisation-and-shutdown -->
+- [x] Serial transport (section 3.2) <!-- spec-serial-transport -->
+- [x] Command protocol (common behaviour) (section 3.3) <!-- spec-command-protocol-common-behaviour -->
+- [x] Configuration (section 3.4) <!-- spec-configuration -->
+- [x] Motors (section 3.5) <!-- spec-motors -->
+- [x] Sensors (section 3.6) <!-- spec-sensors -->
+- [x] I2C, IO and power (section 3.7) <!-- spec-i2c-io-and-power -->
+- [x] Auto-monitoring reception (section 3.8) <!-- spec-auto-monitoring-reception -->
+- [x] Console utilities (section 3.9) <!-- spec-console-utilities -->
+- [x] Build (section 3.10) <!-- spec-build -->
+- [x] Example programs (section 3.11) <!-- spec-example-programs -->
+- [ ] `examples/koala_auto_mode_test.c` (owner's refactoring) (declared, not implemented) <!-- spec-examples-koalaautomodetest-c-owner-s-refactoring -->
+- [ ] `test_sound()`, reached by `koala_test` input starting `so` (declared, not implemented) <!-- spec-testsound-reached-by-koalatest-input-starting-so -->
+- [ ] `-d` / `--debug` option (declared, not implemented) <!-- spec-d-debug-option -->
+- [ ] `KOALA_RS232_MESSAGE_ERROR_CHAR` (`'#'`) (declared, not implemented) <!-- spec-koalars232messageerrorchar -->
+- [ ] `koala_getcommand_line_nowait()` in the public API (declared, not implemented) <!-- spec-koalagetcommandlinenowait-in-the-public-api -->
+- [ ] Battery, US, GPS, I2C, PID and accelerometer demos in `koala_example` (declared, not implemented) <!-- spec-battery-us-gps-i2c-pid-and-accelerometer-demos-in- -->
+- [ ] Drive-mode auto-stop after 100 ms without a key (declared, not implemented) <!-- spec-drive-mode-auto-stop-after-100-ms-without-a-key -->
+- [ ] `src/robot` (IR proximity, buzzer, LEDs, switches via I2C registers) (declared, not implemented) <!-- spec-src-robot-ir-proximity-buzzer-leds-switches-via-i2 -->
+- [ ] Manual's `template/` and `doc/` directories and top-level `make examples` (declared, not implemented) <!-- spec-manual-s-template-and-doc-directories-and-top-leve -->
+- [ ] README "Example" section (declared, not implemented) <!-- spec-readme-example-section -->
+
+<!-- jira-sync:end -->
+
 ## 1. Purpose and scope
 
 The system is a C library, `libkoala`, through which a program running on the Koala 2.5
